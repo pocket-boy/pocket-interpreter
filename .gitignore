@@ -15,7 +15,3 @@ CMakePresets.json
 
 # Build
 /build
-
-# Local testing
-/test
-/assets
