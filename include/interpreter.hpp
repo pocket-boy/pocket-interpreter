@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdint>
 #include <string>
 #include <vector>
 
@@ -33,6 +34,15 @@ public:
 
     bool running() const;
     void shutdown();
+
+    void process(void);
+
+    void begin(void) const;
+    void delay(void) const;
+
+    uint8_t input(void) const;
+
+    void clear(void);
 
 private:
     struct Impl;

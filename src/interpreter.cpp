@@ -1,6 +1,9 @@
 #include "interpreter.hpp"
+#include "SDL3/SDL_keyboard.h"
+#include "SDL3/SDL_timer.h"
 #include <SDL3/SDL.h>
 #include <SDL3_image/SDL_image.h>
+#include <cmath>
 #include <iostream>
 #include <vector>
 
@@ -28,6 +31,10 @@ struct Interpreter::Impl
     
     bool running = false;
     bool holding = false;
+
+    uint8_t input;
+
+    uint32_t start;
 };
 
 Interpreter::Interpreter()
@@ -150,6 +157,42 @@ void Interpreter::addSprite(const Sprite& sprite)
 void Interpreter::clearSprites()
 {
     impl->sprites.clear();
+}
+
+void Interpreter::process(void)
+{
+    SDL_Event event;
+
+    while (SDL_PollEvent(&event))
+    {
+        if (event.type == SDL_EVENT_QUIT)
+            impl->running = false;
+    }
+
+    const bool *key_states = SDL_GetKeyboardState(nullptr);
+
+    this->impl->input = 0b00000000;
+
+    this->impl->input |= key_states[SDL_SCANCODE_Z] << 5;
+    this->impl->input |= key_states[SDL_SCANCODE_X] << 4;
+    this->impl->input |= key_states[SDL_SCANCODE_W] << 3;
+    this->impl->input |= key_states[SDL_SCANCODE_S] << 2;
+    this->impl->input |= key_states[SDL_SCANCODE_A] << 1;
+    this->impl->input |= key_states[SDL_SCANCODE_D] << 0;
+}
+
+void Interpreter::begin(void) const
+{
+    this->impl->start = SDL_GetTicks();
+}
+
+void Interpreter::delay(void) const
+{
+    uint32_t end = SDL_GetTicks();
+
+    uint32_t elapsed = (end - this->impl->start);
+
+    SDL_Delay(std::max(0.0, floor(((1.0 / 30.0) * 1000) - elapsed)));
 }
 
 void Interpreter::tick()
@@ -383,6 +426,17 @@ bool Interpreter::running() const
 void Interpreter::shutdown()
 {
     cleanup();
+}
+
+uint8_t Interpreter::input(void) const
+{
+    return this->impl->input;
+}
+
+void Interpreter::clear(void)
+{
+    std::fill(this->impl->background.begin(), this->impl->background.end(), 0);
+    std::fill(this->impl->foreground.begin(), this->impl->foreground.end(), 0);
 }
 
 void Interpreter::cleanup()
