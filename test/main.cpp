@@ -20,36 +20,15 @@ extern "C" void draw_tile(ExternEnviron *self, uint32_t tile, uint32_t x,
   interpreter.setForegroundTile(x, y, tile);
 }
 
-const char *PROGRAM =
-    "local let x: int = "
-    "5\nlocal let y: int = 3\n\ndef step(window: Window, x: int, y: int) -> "
-    "unit:\n\tdraw(window, 32, x, y)\n\ndef render(window: Window, _: Input) "
-    "-> unit:\n\tstep(window, x, y)\n\tstep(window, y, x)\n\tstep(window, x, "
-    "x)\n\tstep(window, y, y)";
-
-// const char *TEST =
-//     "def render(window: Window, _: Input) -> "
-//     "unit:\n\tdraw(window, 8, 5, 5)\n\tdraw(window, 5, 6, 5)\n\tdraw(window,
-//     " "12, 7, 5)\n\tdraw(window, 12, 8, 5)\n\tdraw(window, 15, 9, "
-//     "5)\n\tdraw(window, 16, 10, 5)";
-
-// const char *TEST =
-//     "local let x := 5\nlocal let y := 5\nlocal let show := false\n\ndef "
-//     "render(window: Window, input: Input) -> unit:\n\tshow = false\n\tif "
-//     "left(input):\n\t\tshow = true\n\tif show:\n\t\tdraw(window, 8, x, y)";
-
-const char *TEST = "def render(window: Window, input: Input) -> unit:\n\tif "
-                   "left(input):\n\t\tdraw(window, 32, 5, 5)\n\tif "
-                   "right(input):\n\t\tdraw(window, 32, 6, 5)\n\tif "
-                   "up(input):\n\t\tdraw(window, 32, 5, 6)\n\tif "
-                   "down(input):\n\t\tdraw(window, 32, 6, 6)";
-
 const char *GAME =
-    "def render(window: Window, input: Input) -> unit:\n\tdraw(window, 2, 7, "
-    "5)\n\tif left(input):\n\t\tdraw(window, 1, 5, 5)\n\tif "
-    "down(input):\n\t\tdraw(window, 1, 6, 5)\n\tif "
-    "right(input):\n\t\tdraw(window, 1, 7, 5)\n\tif "
-    "up(input):\n\t\tdraw(window, 3, 7, 4)";
+    "def render(window: Window, input: Input) -> unit:\n\tWindow.draw(window, "
+    "2, 7, "
+    "5)\n\tif Input.pressed(input, Input.LEFT):\n\t\tWindow.draw(window, 1, 5, "
+    "5)\n\tif "
+    "Input.pressed(input, Input.DOWN):\n\t\tWindow.draw(window, 1, 6, 5)\n\tif "
+    "Input.pressed(input, Input.RIGHT):\n\t\tWindow.draw(window, 1, 7, "
+    "5)\n\tif "
+    "Input.pressed(input, Input.UP):\n\t\tWindow.draw(window, 3, 7, 4)";
 
 int main(void) {
 
