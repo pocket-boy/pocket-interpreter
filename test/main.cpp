@@ -20,15 +20,66 @@ extern "C" void draw_tile(ExternEnviron *self, uint32_t tile, uint32_t x,
   interpreter.setForegroundTile(x, y, tile);
 }
 
-const char *GAME =
-    "def render(window: Window, input: Input) -> unit:\n\tWindow.draw(window, "
-    "2, 7, "
-    "5)\n\tif Input.pressed(input, Input.LEFT):\n\t\tWindow.draw(window, 1, 5, "
-    "5)\n\tif "
-    "Input.pressed(input, Input.DOWN):\n\t\tWindow.draw(window, 1, 6, 5)\n\tif "
-    "Input.pressed(input, Input.RIGHT):\n\t\tWindow.draw(window, 1, 7, "
-    "5)\n\tif "
-    "Input.pressed(input, Input.UP):\n\t\tWindow.draw(window, 3, 7, 4)";
+const char *GAME = R"(
+local let MOVE_TIME := 5
+
+local var x := 5
+
+local var y := 5
+
+local var move_tick := MOVE_TIME
+
+local var first := true
+
+local var places_x := [3]
+
+local var places_y := [3]
+
+local var current := 0
+
+def render(window: Window, input: Input) -> unit:
+
+  if first:
+    first = false
+
+    places_x = Array.set(places_x, 0, 20)
+    places_x = Array.set(places_x, 1, 10)
+    places_x = Array.set(places_x, 2, 15)
+
+    places_y = Array.set(places_y, 0, 20)
+    places_y = Array.set(places_y, 1, 10)
+    places_y = Array.set(places_y, 2, 15)
+
+  if ((move_tick == 0) && Input.pressed(input, Input.LEFT)) && (x > 0):
+    x = x - 1
+    move_tick = MOVE_TIME
+
+  if ((move_tick == 0) && Input.pressed(input, Input.RIGHT)) && (x < 31):
+    x = x + 1
+    move_tick = MOVE_TIME
+
+  if ((move_tick == 0) && Input.pressed(input, Input.UP)) && (y > 0):
+    y = y - 1
+    move_tick = MOVE_TIME
+
+  if ((move_tick == 0) && Input.pressed(input, Input.DOWN)) && (y < 31):
+    y = y + 1
+    move_tick = MOVE_TIME
+
+  if move_tick > 0:
+    move_tick = move_tick - 1
+
+  Window.draw(window, 1, x, y)
+
+  if current < 3:
+    let curr_x := Array.get(places_x, current)
+    let curr_y := Array.get(places_y, current)
+
+    Window.draw(window, 2, curr_x, curr_y)
+
+    if (x == curr_x) && (y == curr_y):
+      current = current + 1
+)";
 
 int main(void) {
 
