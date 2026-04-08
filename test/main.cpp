@@ -33,10 +33,23 @@ const char *PROGRAM =
 //     " "12, 7, 5)\n\tdraw(window, 12, 8, 5)\n\tdraw(window, 15, 9, "
 //     "5)\n\tdraw(window, 16, 10, 5)";
 
-const char *TEST =
-    "local let x := 5\nlocal let y := 5\nlocal let show := false\n\ndef "
-    "render(window: Window, input: Input) -> unit:\n\tshow = false\n\tif "
-    "left(input):\n\t\tshow = true\n\tif show:\n\t\tdraw(window, 8, x, y)";
+// const char *TEST =
+//     "local let x := 5\nlocal let y := 5\nlocal let show := false\n\ndef "
+//     "render(window: Window, input: Input) -> unit:\n\tshow = false\n\tif "
+//     "left(input):\n\t\tshow = true\n\tif show:\n\t\tdraw(window, 8, x, y)";
+
+const char *TEST = "def render(window: Window, input: Input) -> unit:\n\tif "
+                   "left(input):\n\t\tdraw(window, 32, 5, 5)\n\tif "
+                   "right(input):\n\t\tdraw(window, 32, 6, 5)\n\tif "
+                   "up(input):\n\t\tdraw(window, 32, 5, 6)\n\tif "
+                   "down(input):\n\t\tdraw(window, 32, 6, 6)";
+
+const char *GAME =
+    "def render(window: Window, input: Input) -> unit:\n\tdraw(window, 2, 7, "
+    "5)\n\tif left(input):\n\t\tdraw(window, 1, 5, 5)\n\tif "
+    "down(input):\n\t\tdraw(window, 1, 6, 5)\n\tif "
+    "right(input):\n\t\tdraw(window, 1, 7, 5)\n\tif "
+    "up(input):\n\t\tdraw(window, 3, 7, 4)";
 
 int main(void) {
 
@@ -45,7 +58,7 @@ int main(void) {
 
   std::filesystem::path assets = ASSETS_DIR;
 
-  auto tilemap = assets / "font.png";
+  auto tilemap = assets / "littleguy.png";
   auto sprites = assets / "test2.png";
 
   if (!interpreter.loadTilemap(tilemap.string()))
@@ -60,7 +73,7 @@ int main(void) {
 
   CompilerHandle compiler;
 
-  compiler.load_module("main", TEST);
+  compiler.load_module("main", GAME);
 
   BackendHandle backend(std::move(compiler), environ);
 
