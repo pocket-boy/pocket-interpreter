@@ -34,12 +34,16 @@ add_subdirectory(lib/SDL_image EXCLUDE_FROM_ALL)
 corrosion_import_crate(MANIFEST_PATH lib/pocket-compiler/Cargo.toml
                        CARGO_TARGET_TRIPLE ${CMAKE_C_COMPILER_TARGET})
 
-add_library(pocket-interpreter src/interpreter.cpp src/compiler.cpp
-                               src/backend.cpp)
+add_library(pocket-interpreter src/interpreter.cpp lib/pocket-compiler/lib/compiler.cpp
+                               lib/pocket-compiler/lib/backend.cpp)
 
 # Include Pocket Interpreter headers.
 target_include_directories(pocket-interpreter
                            PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+
+# Include Pocket Interpreter headers.
+target_include_directories(pocket-interpreter
+                           PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/lib/pocket-compiler/lib)
 
 # Compile with C++ version set.
 target_compile_features(pocket-interpreter PUBLIC cxx_std_20)
