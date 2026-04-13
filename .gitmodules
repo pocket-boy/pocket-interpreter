@@ -7,4 +7,4 @@
 [submodule "lib/pocket-compiler"]
 	path = lib/pocket-compiler
 	url = https://github.com/pocket-boy/pocket-compiler.git
-	branch = task/refactor
+	branch = task/cpp-lib
